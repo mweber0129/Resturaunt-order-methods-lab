@@ -1,73 +1,96 @@
+/*
+ * Author: Michael Weber
+ * Class: 202610:10037 Object-Oriented Programming (ITSE-2321-201)
+ * Date: 09/03/2025
+ * Assignment: Restaurant Ordering System Using Methods
+ * Description: This program allows users to order food items from a menu,
+ * calculates the total cost, and applies a discount if provided.
+ */
+
 import java.util.Scanner;
 
 public class RestaurantOrder {
 
-    public static void displayMenu() {
-        System.out.println("Menu:");
+    // Displays the menu to the user
+    public static void showMenu() {
+        System.out.println("------ MENU ------");
         System.out.println("1. Burger - $5.99");
-        System.out.println("2. Pizza - $8.99");
-        System.out.println("3. Salad - $4.99");
-        System.out.println("4. Soda - $1.99");
+        System.out.println("2. Pizza  - $8.99");
+        System.out.println("3. Salad  - $4.99");
+        System.out.println("4. Soda   - $1.99");
+        System.out.println("------------------");
     }
 
-    public static double getItemPrice(int itemNumber) {
-        switch (itemNumber) {
-            case 1: return 5.99;
-            case 2: return 8.99;
-            case 3: return 4.99;
-            case 4: return 1.99;
-            default: return 0.0;
+    // Returns the price of the item based on the item number
+    public static double getPriceForItem(int itemNum) {
+        switch (itemNum) {
+            case 1: return 5.99; // Burger
+            case 2: return 8.99; // Pizza
+            case 3: return 4.99; // Salad
+            case 4: return 1.99; // Soda
+            default: return 0.0; // Invalid item
         }
     }
 
-    public static void takeOrder() {
-        Scanner scanner = new Scanner(System.in);
-        double totalCost = 0.0;
+    // This method handles the ordering process
+    public static void startOrder() {
+        Scanner input = new Scanner(System.in);
+        double total = 0.0;
 
         System.out.println("Enter the item number to order (0 to finish):");
 
         while (true) {
-            int choice = scanner.nextInt();
-            if (choice == 0) break;
+            int itemNumber = input.nextInt();
 
-            double price = getItemPrice(choice);
-            if (price == 0.0) {
-                System.out.println("Invalid selection.");
+            if (itemNumber == 0) {
+                break;
+            }
+
+            double itemPrice = getPriceForItem(itemNumber);
+
+            if (itemPrice == 0.0) {
+                System.out.println("Invalid selection. Please choose from the menu.");
             } else {
-                totalCost += price;
-                System.out.printf("Added $%.2f | Current total: $%.2f%n", price, totalCost);
+                total += itemPrice;
+                System.out.printf("Added $%.2f to total. Current total: $%.2f%n", itemPrice, total);
             }
         }
 
-        scanner.nextLine(); // clear buffer
-        System.out.println("Do you have a discount? (yes/no)");
-        String hasDiscount = scanner.nextLine();
+        // Ask if user has a discount
+        input.nextLine(); // clear buffer
+        System.out.print("Do you have a discount code? (yes/no): ");
+        String hasDiscount = input.nextLine();
 
         if (hasDiscount.equalsIgnoreCase("yes")) {
-            System.out.println("Enter discount percentage:");
-            double discount = scanner.nextDouble();
-            totalCost = calculateTotal(totalCost, discount);
+            System.out.print("Enter discount percentage (e.g., 10 for 10%): ");
+            double discountPercent = input.nextDouble();
+            total = getFinalTotal(total, discountPercent);
         } else {
-            totalCost = calculateTotal(totalCost);
+            total = getFinalTotal(total);
         }
 
-        System.out.printf("Final total: $%.2f%n", totalCost);
+        System.out.printf("Your final total is: $%.2f%n", total);
     }
 
-    public static double calculateTotal(double totalCost) {
-        return totalCost;
+    // Calculates total without discount
+    public static double getFinalTotal(double totalAmount) {
+        return totalAmount;
     }
 
-    public static double calculateTotal(double totalCost, double discount) {
-        if (discount < 0 || discount > 100) {
-            System.out.println("Invalid discount value. No discount applied.");
-            return totalCost;
+    // Overloaded method to apply a discount
+    public static double getFinalTotal(double totalAmount, double discountPercent) {
+        if (discountPercent < 0 || discountPercent > 100) {
+            System.out.println("Invalid discount. No discount applied.");
+            return totalAmount;
         }
-        return totalCost - (totalCost * discount / 100.0);
+
+        double discountAmount = totalAmount * (discountPercent / 100.0);
+        return totalAmount - discountAmount;
     }
 
+    // Main method to start the program
     public static void main(String[] args) {
-        displayMenu();
-        takeOrder();
+        showMenu();
+        startOrder();
     }
 }
