@@ -6,6 +6,8 @@
  * Description: This program allows users to order food items from a menu,
  * calculates the total cost, and applies a discount if provided.
  */
+cd "C:\Users\micha\OneDrive\Desktop\Javascript Projects\completed projects\LAB resturaunt project\Restaurant Ordering System.java"/RestaurantOrderMethodsLab
+git commit -m "Initial commit - Restaurant Ordering System"
 
 import java.util.Scanner;
 
